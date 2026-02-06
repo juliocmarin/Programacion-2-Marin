@@ -53,6 +53,7 @@
 #include <iomanip>
 using namespace std;
 
+
 // Función para crear un arreglo dinámico
 int* crearArreglo(int tamanio) {
    if(tamanio <=0){
@@ -114,8 +115,7 @@ if(arreglo[i] > mayor){
     mayor = arreglo[i];
 }
 }
-return mayor;
-    return 0; // Placeholder
+return mayor;   
 }
 
 // Función para calcular el promedio
@@ -123,7 +123,7 @@ float calcularPromedio(int* arreglo, int tamanio) {
  if (arreglo == nullptr || tamanio <= 0)
  {
     cout << "El promedio no se puede calcular." <<endl;
-
+     return 0.0f;
  }
 
  int suma = 0;
@@ -133,7 +133,7 @@ float calcularPromedio(int* arreglo, int tamanio) {
  }
  return float (suma) / tamanio;
 
-    return 0.0f; // Placeholder
+    
 }
 
 // Función para liberar la memoria del arreglo
@@ -148,13 +148,13 @@ void liberarArreglo(int*& arreglo) {
 
 // Función para mostrar el menú
 void mostrarMenu() {
-    cout << "\n=== GESTIÓN DE ARREGLOS DINÁMICOS ===" << endl;
+    cout << "\n=== GESTION DE ARREGLOS DINAMICOS ===" << endl;
     cout << "1. Crear y llenar arreglo" << endl;
     cout << "2. Mostrar arreglo" << endl;
-    cout << "3. Encontrar número mayor" << endl;
+    cout << "3. Encontrar numero mayor" << endl;
     cout << "4. Calcular promedio" << endl;
     cout << "5. Salir" << endl;
-    cout << "Seleccione una opción: ";
+    cout << "Seleccione una opcion: ";
 }
 
 int main() {
@@ -164,7 +164,7 @@ int main() {
     int* arreglo = nullptr;
     int tamanio = 0;
     
-    cout << "=== GESTIÓN DE ARREGLOS DINÁMICOS ===" << endl;
+    cout << "=== GESTIÓN DE ARREGLOS DINAMICOS ===" << endl;
     cout << "Implemente las funciones marcadas con TODO para completar el ejercicio." << endl;
     
     int opcion;
@@ -193,7 +193,7 @@ int main() {
                 if (arreglo != nullptr) {
                     mostrarArreglo(arreglo, tamanio);
                 } else {
-                    cout << "No hay arreglo creado. Use la opción 1 primero." << endl;
+                    cout << "No hay arreglo creado. Use la opcion 1 primero." << endl;
                 }
                 break;
             }
@@ -202,9 +202,9 @@ int main() {
                 // Encontrar número mayor
                 if (arreglo != nullptr && tamanio > 0) {
                     int mayor = encontrarMayor(arreglo, tamanio);
-                    cout << "El número mayor es: " << mayor << endl;
+                    cout << "El numero mayor es: " << mayor << endl;
                 } else {
-                    cout << "No hay arreglo creado o está vacío." << endl;
+                    cout << "No hay arreglo creado o esta vacio." << endl;
                 }
                 break;
             }
