@@ -1,0 +1,2 @@
+¿Porque elegi el diseño?
+simplemente porque me parece agradable y atractivo para mi readme, ya que contiene un poco sobre mi y respecto a lo que viene siendo el tema en el cual esta basado mi repositorio, tambien queria darle unas vibes de videojuego por eso coloque el patman.
