@@ -421,3 +421,244 @@ bool rifDuplicado(Tienda* tienda, const char* rif){
     return false;
     
 }
+
+// CRUD DE PRODUCTOS/CALZADO //
+
+void crearProducto(Tienda* tienda){
+
+    cout << "\n=== REGISTRAR NUEVO CALZADO ===\n";
+    cout << "(Puede escribir 0 o CANCELAR en cuelquier paso para salir)\n";
+
+    if (tienda->numProductos >= tienda->capacidadProductos){
+        redimensionarProductos(tienda);
+    }
+
+    Producto* p = &tienda->productos[tienda->numProductos];
+    char temp[200];
+    int idProv;
+
+    limpiarBuffer();
+    cout << "Codigo (EJ. CAL-001): "; cin.getline(temp, 20);
+
+    if(strcmp(temp, "0") == 0 || strcmp(temp, "CANCELAR") == 0)
+     { cout << "Operacion cancelada.\n";
+         return;
+        }
+
+    if(codigoDuplicado(tienda, temp))
+
+    { cout << "ERROR: El codigo '" << temp << "' ya esta registrado.\n";
+        return;
+    }
+    strcpy(p->codigo, temp);
+
+    cout << "Marca ( Nike, Adidas, Puma...): "; cin.getline(p->marca, 50);
+    if(strcmp(p->marca, "0") == 0)
+    {cout << "Operacion Cancelada.\n";
+         return;
+    }
+
+    cout << "Modelo: "; cin.getline(p->modelo, 50);
+    cout << "Nombre: "; cin.getline(p->nombre, 100);
+    if(strcmp(p->nombre, "0") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
+    cout << "Talla: "; cin.getline(p->talla, 10);
+    cout << "Color: "; cin.getline(p->color, 30);
+    cout << "Genero: "; cin.getline(p->genero, 20);
+    cout << "Material: "; cin.getline(p->material, 50);
+    cout << "Descripcion: "; cin.getline(p->descripcion, 200);
+    
+    cout << "ID Proveedor: "; cin >> idProv; limpiarBuffer();
+    if(idProv == 0){
+        cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
+    if (!existeProveedor(tienda, idProv))
+    {
+        cout << "ERROR: El proveedor con ID " << idProv << " no existe. Debe de registrar el proveedor primero.\n";
+        return;
+    }
+
+    p->idProveedor = idProv;
+
+    cout << "Precio de Compra: "; cin >> p->precioCompra; limpiarBuffer();
+    if (p->precioCompra <= 0) 
+    {
+        cout << "ERROR: el precio ejercido debe ser mayor que 0.\n";
+        return;
+    }
+    
+    cout << "Precio de Venta: "; cin >> p->precio; limpiarBuffer();
+    if (p->precio <= 0)
+    {
+        cout << "ERROR: El precio tiene que ser mayor que 0.\n";
+        return;
+    }
+    
+    cout << "Stock Inicial: "; cin >> p->stock; limpiarBuffer();
+    if (p->stock < 0)
+    {
+        cout << "ERROR: El stock no puede ser negativo.\n";
+        return;
+    }
+    
+    cout << "Stock Minimo (atencion): "; cin >> p->minimoStock; limpiarBuffer();
+    if(p->minimoStock < 0) p->minimoStock = 5;
+
+    // confirmacion jeje//
+
+    cout << "\n==== RESUMEN =====\n";
+    cout << "Codigo: " << p->codigo << "\n";
+    cout << "Marca: " << p->marca << "\n";
+    cout << "Nombre: " << p->nombre << "\n";
+    cout << "Talla: " << p->talla << "\n";
+    cout << "Precio Venta: " << p->precio << "\n";
+    cout << "Stock: " << p->stock << "\n";
+
+    char conf;
+    cout << "\n¿Guardar calzado? (Si / No): "; cin >> conf; limpiarBuffer();
+    if (conf != 'S' && conf != 's')
+    {
+        cout << "Operacion cancelada.\n";
+        return;
+    }
+
+   // COLOCAR ID AUTOMATICO // 
+  
+   p->id = tienda->siguienteIdProducto++;
+   obtenerFechaActual(p->fechaRegistro);
+   tienda->numProductos++;
+
+   cout << "OK: Calzado registrado de manera exitosa con ID: " << p->id << "\n";
+
+
+}
+
+void listarProductos(Tienda* tienda){
+
+    cout << "\n === LISTADO DE CALZADOS ===\n";
+    cout << left << setw(5) << "ID" << setw(12) << "Codigo" << setw (20) << "Nombre"
+         << setw (12) << "Marca" << setw(6) << "Talla" << setw(10) << "Precio" << setw(6) << "Stock" << endl;
+    cout << string(75, '-') << endl;
+
+
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        cout << left << setw(5) << tienda->productos[i].id
+                     << setw(12) << tienda->productos[i].codigo
+                     << setw(20) << tienda->productos[i].nombre
+                     << setw(12) << tienda->productos[i].marca
+                     << setw(6) << tienda->productos[i].talla
+                     << setw(10) << tienda->productos[i].precio
+                     << setw(6) << tienda->productos[i].stock << endl;
+            
+    }
+    
+    cour << "Total de calzados: " << tienda->numProductos << endl;
+
+}
+
+void buscarProducto(Tienda* tienda){
+    int op;
+    cout << "\n===== BUSCAR CALZADO =====\n";
+    cout << "1. Por ID\n";
+    cout << "2. Por nombre\n";
+    cout << "3. Por codigo\n";
+    cout << "4. Por marca\n";
+    cout << "0. Cancelar\n";
+    cout << "Opcion: "; cin >> op; limpiarBuffer();
+    if (op == 0)
+    {
+        return;
+    }
+
+    if (op == 1)
+    {
+        int id; 
+        cout << "ID: "; cin >> id; limpiarBuffer();
+        for (int i = 0; i < tienda->numProductos; i++)
+        {
+            if(tienda->productos[i].id == id){
+                cout << "Encontrado: " << tienda->productos[i].nombre
+                << " (" << tienda->productos[i].marca << " - Talla"
+                << tienda->productos[i].talla << ")\n";
+                
+        return;
+
+
+            }
+        }
+        
+        cout << "No encontrado.\n";
+
+    } else if (op == 2)
+    {
+        char busqueda[100]; 
+        cout << "Nombre: "; cin.getline(busqueda, 100);
+        bool found = false;
+
+        for (int i = 0; i < tienda->numProductos; i++)
+        {
+            if (contieneSubstring(tienda->productos[i].nombre, busqueda))
+            {
+                cout << "Encuentra: " << tienda->productos[i].nombre
+                    << " (ID: " << tienda->productos[i].id << ")\n";
+                found = true;
+            }
+            
+        }
+
+        if(!found) cout << "No hay concidencias.\n";
+
+    } else if (op == 3)
+    {
+        char busqueda[20];
+        cout << "Codigo: "; cin.getline(busqueda, 20);
+        bool found = false;
+
+        for (int i = 0; i < tienda->numProductos; i++)
+        {
+            if (contieneSubstring(tienda->productos[i].codigo, busqueda))
+            {
+                cout << "Encuentra: " << tienda->productos[i].nombre
+                     << "( " << tienda->productos[i].codigo << ")\n";
+                found = true;
+            }
+            
+        }
+
+        if(!found) cout << "No hay coincidencias.\n";
+
+    }else if (op == 4)
+    {
+        char marca[50];
+        cout << "Marca: "; cin.getline(marca, 50);
+        bool found = false;
+
+        for (int i = 0; i < tienda->numProductos; i++)
+        {
+            if (contieneSubstring(tienda->productos[i].marca, marca))
+            {
+                cout << "Encuentra: " << tienda->productos[i].nombre
+                     << " - Talla: " << tienda->productos[i].talla
+                     << " - Stock: " << tienda->productos[i].stock << ")\n";
+                found = true;
+            }
+        
+        }
+        
+        if (!found) cout << "No hay coincidencias. \n";
+
+    }
+
+
+    
+    
+    
+    
+    
+}
