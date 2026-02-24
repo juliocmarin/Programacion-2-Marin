@@ -580,6 +580,7 @@ void buscarProducto(Tienda* tienda){
     {
         int id; 
         cout << "ID: "; cin >> id; limpiarBuffer();
+
         for (int i = 0; i < tienda->numProductos; i++)
         {
             if(tienda->productos[i].id == id){
@@ -650,15 +651,421 @@ void buscarProducto(Tienda* tienda){
             }
         
         }
-        
-        if (!found) cout << "No hay coincidencias. \n";
+        if (!found) cout << "No hay hay calzado de esta marca.\n";
+    }  
+}
 
+void actualizarProducto(Tienda* tienda){
+    int id;
+    cout << "ID calzado a editar: "; cin >> id; limpiarBuffer();
+
+    int idx = -1;
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        if (tienda->productos[i].id == id)
+        {
+            idx = i;
+            break;
+        }
+        
+    }
+    
+    if (idx == -1)
+    {
+        cout << "ERROR: Calzado no existe.\n";
+        return;
     }
 
+    Producto* p = &tienda->productos[idk];
+    int op;
+    char temp[200];
+    
 
+    do
+    {
+        cout << "\n=== EDITAR CALZADO ID: " << p->id << "===\n";
+        cout << "1. Marca (" << p->marca << ")\n";
+        cout << "2. Modelo (" << p->modelo << ")\n";
+        cout << "3. Nombre ("  << p->nombre << ")\n";
+        cout << "4. Talla (" << p->talla << ")\n";
+        cout << "5. Color (" << p->color << ")\n";
+        cout << "6. Precio (" << p->precio << ")\n";
+        cout << "7. Stock (" << p->stock << ")\n";
+        cout << "8. Guardar cambios\n";
+        cout << "0. Cancelar\n";
+        cout << "Opcion: "; cin >> op; limpiarBuffer();
+
+
+        switch (op)
+        {
+
+        case 1:
+            cout << "Marca: ";
+            cin.getline(temp, 50);
+            strcpy(p->marca, temp);
+            break;
+        
+        case 2:
+             cout << "Modelo: ";
+             cin.getline(temp, 50);
+            break;
+
+        case 3:
+            cout<< "Nombre: ";
+            cin.getline(temp, 100);
+            break;
+            
+        case 4:
+            cout << "Talla: ";
+            cin.getline(temp, 10);
+            break;
+
+        case 5:
+            cout << "Color: ";
+            cin.getline(temp, 30);
+            break;
+        
+        case 6:
+           cout << "Precio: ";
+           cin >> p->precio;
+           limpiarBuffer();
+           break;
+
+        case 7:
+            cout << "Stock: ";
+            cin >> p->stock;
+            limpiarBuffer();
+            break;
+        
+        case 8:
+            cout << "cambios guardados exitosamente.\n";
+            break;
+        }    
+         
+    } while (op != 0 && op != 8);
+       
+}
+
+void actualizarStockProductos(Tienda* tienda){
+    int id, ajuste;
+    cout << "ID calzado: "; cin >> id; limpiarBuffer();
+
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        if (tienda->productos[i].id == id)
+        {
+            cout << "Stock actual: " << tienda->productos[i].stock << "\n";
+            cout << "Ajuste (+ para agregar, - para quitar): "; cin >> ajuste; limpiarBuffer();
+
+            int nuevoStock = tienda->productos[i].stock + ajuste;
+            if (nuevoStock < 0)
+            {
+                cout << "ERROR: El stock no puede ser negativo.\n";
+                return;
+            }
+
+            char conf;
+            cout << "Nuevo stock sera de: " << nuevoStock << "¿Desea confirmar? (Si / No): ";
+            cin >> conf; limpiarBuffer();
+
+            if (conf == 'S' || conf == 's')
+            {
+                tienda->productos[i].stock = nuevoStock;
+                cout << "Stock actualizado correctamente.\n";
+
+            }else {
+                cout << "Operacion cancelada.\n";
+            }
+            return;
+             
+        }
+        
+    }
+
+    cout << "Calzado no encontrado.\n";
+
+}
+
+void eliminarProducto(Tienda* tienda){
+     int id;
+     cout << "ID de el calzado a eliminar: "; cin >> id; limpiarBuffer();
+
+     bool tieneTransacciones = false;
+     for (int i = 0; i < tienda->numTransacciones; i++)
+     {
+        if (tienda->transacciones[i].idProducto == id && !tienda->transacciones[i].cancelada)
+        {
+           tieneTransacciones = true;
+           break; 
+        }
+        
+     }
+
+     if (tieneTransacciones)
+     {
+        cout << "CUIDADO: Este calzado tiene transacciones vinculadas.\n";
+     }
+
+     char conf;
+     cout << "¿Eliminar calzado? (Si / No): "; cin >> conf; limpiarBuffer();
+     if (conf == 'S' || conf == 's')
+     {
+        cout << "Calzado eliminado correctamente.\n";
+
+     }else{
+        cout << "Operacion cancelada.\n";
+
+     }   
+     
+}
+
+void filtrarPorTalla(Tienda* tienda){
+    char talla[10];
+    cout << "Talla a buscar: ";
+    cin.getline(talla, 10);
+    cout << "\nCalzados en talla " << talla << ":\n";
+
+    int encontrados = 0;
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        if (strcmp(tienda->productos[i].talla, talla) == 0 && tienda->productos[i].stock > 0)
+        {
+          cout << "-" << tienda->productos[i].nombre << "(" << tienda->productos[i].marca << ")\n";
+          encontrados ++;
+
+        }
+        if (encontrados == 0)
+        {
+            cout << "No hay calzados en esta talla.\n";
+        }
+        else
+        {
+            cout << "Total encontrados: " << encontrados << "\n";
+
+        }     
+        
+    }   
     
+}
+
+void filtradoPorMarca(Tienda* tienda){
+    char marca[50];
+    cout << "Marca a buscar: ";
+    cin.getline(marca, 50);
+    cout << "\nCalzados en marca " << marca << ":\n";
+
+    int encontrados = 0;
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        if (contieneSubstring(tienda->productos[i].marca, marca))
+        {
+            cout << "-" << tienda->productos[i].nombre << "- Talla" << tienda->productos[i].talla << "\n";
+            encontrados ++;
+        }
+        if (encontrados == 0)
+        {
+            cout << "No hay calazado de estar marca.\n";
+
+        }
+        else{
+            cout << "Total encontrados: " << encontrados << "\n";
+        }       
+    }
     
+}
+
+void alertasStockBajo(Tienda* tienda){
+    cout << "\n=== ALERTAS DE STOCK BAJO ===\n";
+    int alertas = 0;
+    for (int i = 0; i < tienda->numProductos; i++)
+    {
+        if (tienda->productos[i].stock <= tienda->productos[i].minimoStock)
+        {
+           cout << "ALERTA: " << tienda->productos[i].nombre
+                << "- Stock: " << tienda->productos[i].stock
+                << "(Minimo: " << tienda->productos[i].minimoStock << ")\n";
+                alertas ++;
+        }
+        
+    }
+    if (alertas == 0)
+    {
+        cout << "Todos los productos tienenn stock suficiente.\n";
+    }
+    else
+    {
+       cout << "Total de alerta: " << alertas << "\n";
+    }
     
+}
+
+ // CRUD PROVEEDORES //
+
+void crearProveedores(Tienda* tienda){
+    cout << "\n==== REGISTRAR PROVEEDOR===\n";
+    cout << "(Debe escribir 0 o CANCELAR para salir)\n";
+
+    if (tienda->numProveedores >= tienda->capacidadProveedores)
+    {
+        redimensionarProveedores(tienda);
+    }
+
+    Proveedor* p = &tienda->proveedores[tienda->numProveedores];
+    char temp[100];
+
+
+    cout << "Nombre: "; cin.getline(temp, 100);
+    if (strcmp(temp, "0") == 0)
+    {
+        cout << "Operacion cancelada\n";
+        return;
+    }
+
+    strcpy(p->nombre, temp);
     
+    cout << "RIF: "; cin.getline(temp, 20);
+    if (strcmp(temp, "0") == 0)
+    {
+        cout << "Operacion cancelada\n";
+        return 0;
+    }
+
+    if (rifDuplicado( tienda, temp))
+    {
+        cout << "ERROR: rif duplicado\n";
+        return;
+    }
+    strcpy(p->email, temp);
+
+    cout << "Direccion: "; cin. getline(p->direccion, 200);
+
+    char conf;
+    cout << "\n¿ Guardar proveedor? (Si / No): "; cin >> conf; limpiarBuffer();
+    if (conf != 'S' && conf != 's')
+    {
+        cout << "Operacion cancelada\n";
+        return;
+    }
+
+    p->id = tienda->siguienteIdProveedor++;
+    obtenerFechaActual(p->fechaRegistro);
+    tienda->numProveedores++;
+
+    cout << "Ok: Proveedor registrado de manera exitosa con ID: " << p->id << "\n";
+   
+}
+
+void listarProveedores(Tienda* tienda){
+    cout << "\n===== LISTADO DE PROVEEDORES====\n";
+    cout << left << setw(5) << "ID" << setw(30) << "Nombre" << setw(20) << "RIF" << setw(15) << "Telefono" << endl;
+    cout << string(70, '-') << endl;
+
+    for (int i = 0; i < tienda->numProveedores; i++)
+    {
+        cout << left << setw(5) << tienda->proveedores[i].id
+                     << setw(30) << tienda->numProveedores[i].nombre
+                     << setw(20) << tienda->proveedores[i].rif
+                     << setw(15) << tienda->proveedores[i].telefono << endl;
+            
+    }
     
+    cout << "Total de proveedores: " << tienda->numProveedores << endl;
+
+}
+
+void buscarProveedor(Tienda* tienda){
+    int op;
+    cout << "\n=== BUSCAR PROVEEDOR ===\n";
+    cout << "1. Por ID\n";
+    cout << "2. Por Nombre\n";
+    cout << "3. Por rif\n";
+    cout << "0. Cancelar\n";
+    cout << "Opcion: "; cin >> op, limpiarBuffer();
+   
+    if (op == 0)
+    {
+        return;
+    }
+    
+    if (op == 1)
+    {
+        int id;
+        cout << "ID: "; cin >> id; limpiarBuffer();
+
+        for (int i = 0; i < tienda->numProveedores; i++)
+        {
+            if (tienda->proveedores[i].id == id)
+            {
+                cout << "Encontrado: " << tienda->proveedores[i].nombre << "\n";
+                return;
+            }
+        }
+
+        cout << "No encontrado.\n";
+    
+    }else if (op == 2)
+    {
+        char nombre[100];
+        cout << "Nombre: "; cin.getline(nombre, 100);
+        bool found = false;
+
+        for (int i = 0; i < tienda->numProveedores; i++)
+        {
+            if (contieneSubstring(tienda->proveedores[i].nombre, nombre))
+            {
+                cout << "Encuentra: " << tienda->proveedores[i].nombre << "(ID: " << tienda->proveedores[i].id << "\n";
+                found = true;
+            
+            }
+            
+        }
+    if(!found) cout << "No hay concidencias.\n";
+
+        
+    }else if (op == 3)
+    {
+        char rif[20];
+        cout << "Rif: "; cin.getline(rif, 20);
+
+        for (int i = 0; i < tienda->numProveedores; i++)
+        {
+            if (strcmp(tienda->proveedores[i].rif, rif) == 0)
+            {
+                cout << "Encontrado: " << tienda->proveedores[i].nombre << "\n";
+                return;
+            }
+
+            
+        }
+
+        cout << "No encontrado\n";
+        
+    }
+    
+}
+
+void actualizarProveedor(Tienda* tienda){
+     int id;
+     cout << "ID de el proveeedor a editar: "; cin >> id; limpiarBuffer();
+
+     int idx = -1;
+     for (int i = 0; i < tienda->numProveedores; i++)
+     {
+        if (tienda->proveedores[i].id == id)
+        {
+            idx = i;
+            break;
+        }
+        
+     }
+     if (idx == -1)
+     {
+        cout << "ERROR: Proveedor no existe.\n";
+        return;
+     }
+
+     Proveedor* p = &tienda->proveedores[idx];
+     int op;
+     char temp[200];     
+     
 }
