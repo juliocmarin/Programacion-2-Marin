@@ -1,10 +1,10 @@
 
-#include <iostream>
-#include <cstring>
-#include <ctime>
-#include <iomanip>
-#include <cctype>
-#include <limits>
+#include <iostream> // LO UTILIZAMOS PARA CIN Y COUT //
+#include <cstring>  // PARA PODER TRABAJAR CON STRCPY, STRCMP, STRLEN, ESENCIALES PARA EL MANEJO DE CHAR[] //
+#include <ctime>    // LO EMPLEAMOS PARA LAS FECHAS, TIME(), LOCALTIME(), PARA OBTENER FECHA ACTUAL //
+#include <iomanip>  // ESENCIAL PARA SETW() Y LEFT(), QUE SON UTILIZADOS PARA LAS TABLAS //
+#include <cctype>   // PARA TOLOWER() CONVERTIR A MINISCULAS //
+#include <limits>   // ESTO LO UTILIZAMOS PARA NUMERIC_LIMITS, O SEA PARA LIMPIARBUFFER() CORRECTAMENTE //
 
 using namespace std;
 
@@ -477,7 +477,7 @@ void crearProducto(Tienda* tienda){
     char temp[200];
     int idProv;
 
-    limpiarBuffer();
+
     cout << "Codigo (EJ. CAL-001): "; cin.getline(temp, 20);
 
     if(strcmp(temp, "0") == 0 || strcmp(temp, "CANCELAR") == 0)
@@ -560,7 +560,7 @@ void crearProducto(Tienda* tienda){
     cout << "Stock: " << p->stock << "\n";
 
     char conf;
-    cout << "\n¿Guardar calzado? (Si / No): "; cin >> conf; limpiarBuffer();
+    cout << "\n¿Guardar calzado? (S/N): "; cin >> conf; limpiarBuffer();
     if (conf != 'S' && conf != 's')
     {
         cout << "Operacion cancelada.\n";
@@ -867,7 +867,7 @@ void eliminarProducto(Tienda* tienda){
      }
 
      char conf;
-     cout << "¿Eliminar calzado? (Si / No): "; 
+     cout << "¿Eliminar calzado? (S/N): "; 
      cin >> conf; limpiarBuffer();
 
      if (conf == 'S' || conf == 's')
@@ -930,7 +930,7 @@ void filtrarPorMarca(Tienda* tienda){
 
     if (encontrados == 0)
         {
-            cout << "No hay calazado de estar marca.\n";
+            cout << "No hay calazado de esta marca.\n";
 
         }
         else{
@@ -1006,7 +1006,7 @@ void crearProveedor(Tienda* tienda){
     cout << "Email: "; cin.getline(temp, 100);
     if (!validarEmail(temp))
     {
-        cout << "Error: formato invalido (debe contener @ y .).\n";
+        cout << "Error: formato invalido (debe tener @ y .).\n";
         return;
     }
     strcpy(p->email, temp);
@@ -1014,7 +1014,7 @@ void crearProveedor(Tienda* tienda){
     cout << "Direccion: "; cin.getline(p->direccion, 200);
 
     char conf;
-    cout << "\n¿ Guardar proveedor? (Si / No): "; cin >> conf; limpiarBuffer();
+    cout << "\n¿Guardar proveedor? (S/N): "; cin >> conf; limpiarBuffer();
     if (conf != 'S' && conf != 's')
     {
         cout << "Operacion cancelada\n";
@@ -1202,7 +1202,7 @@ void eliminarProveedor(Tienda* tienda){
     if (numProductosAsociados > 0) {
         cout << "ADVERTENCIA: Este proveedor tiene " << numProductosAsociados << " productos asociados.\n";
         char conf;
-        cout << "¿Va a elimarlo de todos modos? (Si / No): "; cin >> conf; limpiarBuffer();
+        cout << "¿Va a elimarlo de todos modos? (S/N): "; cin >> conf; limpiarBuffer();
         if (conf != 'S' && conf != 's') {
             cout << "Operacion cancelada.\n";
             return;
@@ -1211,7 +1211,7 @@ void eliminarProveedor(Tienda* tienda){
 
     
     char conf;
-    cout << "¿Eliminar Proveedor? (Si / No): ";
+    cout << "¿Eliminar Proveedor? (S/N): ";
     cin >> conf; limpiarBuffer();
 
     if (conf == 'S' || conf == 's'){
@@ -1269,7 +1269,7 @@ void crearCliente(Tienda* tienda){
     cin.getline(c->direccion, 200);
 
     char conf;
-    cout << "\n¿Guardar cliente? (Si/No): ";
+    cout << "\n¿Guardar cliente? (S/N): ";
     cin >> conf; limpiarBuffer();
 
     if (conf != 'S' && conf != 's')
@@ -1456,7 +1456,7 @@ void eliminarCliente(Tienda* tienda){
     cout << "Cliente: " << tienda->clientes[idx].nombre << "\n";
     
     char conf;
-    cout << "¿Eliminar Cliente? (Si / No): ";
+    cout << "¿Eliminar Cliente? (S/N): ";
     cin >> conf; limpiarBuffer();
 
     if (conf == 'S' || conf == 's')
@@ -1476,56 +1476,48 @@ void eliminarCliente(Tienda* tienda){
 
 // CRUD TRANSACCIONES //
 
-void registrarCompra(Tienda* tienda){
-    cout << "\n=== REGISTRAR COMPRA ====\n";
-
-    int idProd, IdProv, cantidad;
+void registrarCompra(Tienda* tienda) {
+    cout << "\n=== REGISTRAR COMPRA ===\n";
+    
+    int idProd, idProv, cantidad;
     float precio;
-
-    cout << "ID Producto: "; 
-    if (!(cin >> idProd))
-    {
+    
+    cout << "ID Producto: ";
+    if (!(cin >> idProd)) {
         limpiarBuffer();
-        cout << "ERROR: Tiene que ingresar un numero valido, capichi.\n";
+        cout << "ERROR: Debe ingresar un numero valido.\n";
         return;
     }
     limpiarBuffer();
-
+    
     int idxProd = buscarProductoPorId(tienda, idProd);
-    if (idxProd == -1)
-    {
-        cout << "ERROR: El producto con ID " << idProd << " no existe.\n";
-        return;
+    if (idxProd == -1) { 
+        cout << "ERROR: El producto con ID " << idProd << " no existe.\n"; 
+        return; 
     }
     
-
     cout << "ID Proveedor: ";
-    if (!(cin >> IdProv))
-    {
+    if (!(cin >> idProv)) {
         limpiarBuffer();
-        cout << "ERRORR: Tiene que ingresar un numero valido./n";
+        cout << "ERROR: Debe ingresar un numero valido.\n";
         return;
     }
     limpiarBuffer();
-    if (!existeProveedor(tienda, IdProv))
-    {
-        cout << "ERROR: El proveedor con ID " << IdProv << " no existe.\n";
-        return;
+    if (!existeProveedor(tienda, idProv)) { 
+        cout << "ERROR: El proveedor con ID " << idProv << " no existe.\n"; 
+        return; 
     }
-     
-    cout << "Cantidad: ";
-    if (!(cin >> cantidad))
-    {    
-        limpiarBuffer();
-        cout << "ERROR: Tiene que ingresar un numero valido.\n";
-        return;
-    }
-    limpiarBuffer();
     
-    if (cantidad <= 0)
-    {
-        cout << "ERROR: El precio tiene ser mayor a 0.\n";
+    cout << "Cantidad: ";
+    if (!(cin >> cantidad)) {
+        limpiarBuffer();
+        cout << "ERROR: Tiene ingresar un numero valido.\n";
         return;
+    }
+    limpiarBuffer();
+    if (cantidad <= 0) { 
+        cout << "ERROR: La cantidad tiene ser mayor a 0.\n"; 
+        return; 
     }
     
     cout << "Precio Unitario: ";
@@ -1540,95 +1532,82 @@ void registrarCompra(Tienda* tienda){
         return; 
     }
     
-       
-     float total = cantidad * precio;
-
-        cout << "\n=== RESUMEM ===\n";
-        cout << "Producto: " << tienda->productos[idxProd].nombre << "\n";
-        cout << "Cantidad: " << cantidad << "\n";
-        cout << "Precio unitario: " << precio << "\n";
-        cout << "Total: " << total << "\n";
-
-        char conf;
-        cout << "¿Desea confirmar la compra? (Si / No): ";
-        cin >> conf; limpiarBuffer();
-
-        if (conf != 'S' && conf != 's')
-        {
-            cout << "Operacion cancelada.\n";
-            return;
-        }
-        
-        if (tienda->numTransacciones >= tienda->capacidadTransacciones)
-        {
-            redimensionarTransacciones(tienda);
-        }
-
-        Transaccion* t = &tienda->transacciones[tienda->numTransacciones];
-        t->id = tienda->siguienteIdTransaccion++;
-        strcpy(t->tipo, "COMPRA");
-        t->idProducto = idProd;
-        t->idRelacionado = IdProv;
-        t->cantidad = cantidad;
-        t->precioUnitario = precio;
-        t->total = total;
-        obtenerFechaActual(t->fecha);
-        strcpy(t->descripcion, "Compra a proveedor");
-        t->cancelada = false;
-
-        //INCREMENTAR STOCK //
-
-        tienda->productos[idxProd].stock += cantidad;
-        tienda->numTransacciones++;
-
-        cout << "OK: Compra Registrada exitosamente. Stock actualizado a:" << tienda->productos[idxProd].stock << "\n";
+    float total = cantidad * precio;
     
+    cout << "\n=== RESUMEN ===\n";
+    cout << "Producto: " << tienda->productos[idxProd].nombre << "\n";
+    cout << "Cantidad: " << cantidad << "\n";
+    cout << "Precio Unitario: " << precio << "\n";
+    cout << "Total: " << total << "\n";
+    
+    char conf;
+    cout << "\n¿Confirmar compra? (S/N): "; cin >> conf; limpiarBuffer();
+    if (conf != 'S' && conf != 's') { cout << "Operacion cancelada.\n"; return; }
+    
+    if (tienda->numTransacciones >= tienda->capacidadTransacciones) {
+        redimensionarTransacciones(tienda);
+    }
+    
+    Transaccion* t = &tienda->transacciones[tienda->numTransacciones];
+    t->id = tienda->siguienteIdTransaccion++;
+    strcpy(t->tipo, "COMPRA");
+    t->idProducto = idProd;
+    t->idRelacionado = idProv;
+    t->cantidad = cantidad;
+    t->precioUnitario = precio;
+    t->total = total;
+    obtenerFechaActual(t->fecha);
+    strcpy(t->descripcion, "Compra a proveedor");
+    t->cancelada = false;
+    
+    tienda->productos[idxProd].stock += cantidad;
+    tienda->numTransacciones++;
+    
+    cout << "OK: Compra registrada. Stock actualizado a: " << tienda->productos[idxProd].stock << "\n";
 }
 
-void registrarVenta(Tienda* tienda){
+void registrarVenta(Tienda* tienda) {
     cout << "\n=== REGISTRAR VENTA ===\n";
-
+    
     int idProd, idCli, cantidad;
-
+    
     cout << "ID Producto: ";
     if (!(cin >> idProd)) {
 
         limpiarBuffer();
-        cout << "ERROR: Tiene ingresar un numero valido.\n";
+        cout << "ERROR: Debe ingresar un numero valido.\n";
         return;
     }
     limpiarBuffer();
-
-    cout << "ID Cliente: ";
-    if (!(cin >> idCli)) {
-
-       limpiarBuffer();
-       cout << "ERROR: Numero invalido.\n";
-       return;
-    }
-    limpiarBuffer();
-
-    if (!existeCliente(tienda, idCli)) {
-    cout << "ERROR: Cliente no existe.\n";
-    return;
-    }
-
-   cout << "Cantidad: ";
-   if (!(cin >> cantidad)) {
-
-      limpiarBuffer();
-      cout << "ERROR: Numero invalido.\n";
-      return;
-    }
-    limpiarBuffer();
-
+    
     int idxProd = buscarProductoPorId(tienda, idProd);
     if (idxProd == -1) { 
         cout << "ERROR: El producto con ID " << idProd << " no existe.\n"; 
         return; 
     }
-
+    
     cout << "Stock disponible: " << tienda->productos[idxProd].stock << "\n";
+    
+    cout << "ID Cliente: ";
+    if (!(cin >> idCli)) {
+        limpiarBuffer();
+        cout << "ERROR: Debe ingresar un numero valido.\n";
+        return;
+    }
+    limpiarBuffer();
+    if (!existeCliente(tienda, idCli)) { 
+        cout << "ERROR: El cliente con ID " << idCli << " no existe.\n"; 
+        return; 
+    }
+    
+    cout << "Cantidad: ";
+    if (!(cin >> cantidad)) {
+
+        limpiarBuffer();
+        cout << "ERROR: Debe ingresar un numero valido.\n";
+        return;
+    }
+    limpiarBuffer();
 
     if (cantidad <= 0) { 
         cout << "ERROR: La cantidad debe ser mayor a 0.\n"; 
@@ -1636,37 +1615,29 @@ void registrarVenta(Tienda* tienda){
     }
     
     if (cantidad > tienda->productos[idxProd].stock) {
-        cout << "ERROR: Stock insuficiente, no puede ser: " << tienda->productos[idxProd].stock 
+        cout << "ERROR: Stock insuficiente. Disponible: " << tienda->productos[idxProd].stock 
              << ", Solicitado: " << cantidad << "\n";
         return;
     }
-
+    
     float precio = tienda->productos[idxProd].precio;
     float total = cantidad * precio;
-
-
+    
     cout << "\n=== RESUMEN ===\n";
     cout << "Producto: " << tienda->productos[idxProd].nombre << "\n";
     cout << "Cliente ID: " << idCli << "\n";
     cout << "Cantidad: " << cantidad << "\n";
-    cout << "Precio unitario: " << precio << "\n";
+    cout << "Precio Unitario: " << precio << "\n";
     cout << "Total: " << total << "\n";
-
+    
     char conf;
-    cout << "\n¿Desea confirmar la venta? (Si /No): ";
-    cin >> conf; limpiarBuffer();
-
-    if (conf != 'S' && conf != 's')
-    {
-        cout << "Operacion cancelada.\n";
-        return;
+    cout << "\n¿Confirmar venta? (S/N): "; cin >> conf; limpiarBuffer();
+    if (conf != 'S' && conf != 's') { cout << "Operacion cancelada.\n"; return; }
+    
+    if (tienda->numTransacciones >= tienda->capacidadTransacciones) {
+        redimensionarTransacciones(tienda);
     }
-
-    if (tienda->numTransacciones >= tienda->capacidadTransacciones)
-    {
-         redimensionarTransacciones(tienda);
-    }
-
+    
     Transaccion* t = &tienda->transacciones[tienda->numTransacciones];
     t->id = tienda->siguienteIdTransaccion++;
     strcpy(t->tipo, "VENTA");
@@ -1676,312 +1647,222 @@ void registrarVenta(Tienda* tienda){
     t->precioUnitario = precio;
     t->total = total;
     obtenerFechaActual(t->fecha);
-    strcpy(t->descripcion, "Venta a cliente:");
+    strcpy(t->descripcion, "Venta a cliente");
     t->cancelada = false;
-
-//DESCREMENTAR STOCK JEJE//
-
+    
     tienda->productos[idxProd].stock -= cantidad;
     tienda->numTransacciones++;
-
-    cout << "OK: Venta registrada exitosamente. Stock actualizado a:" << tienda->productos[idxProd].stock << "\n";
+    
+    cout << "OK: Venta registrada. Stock actualizado a: " << tienda->productos[idxProd].stock << "\n";
 }
 
-void listarTransacciones(Tienda* tienda){
+void listarTransacciones(Tienda* tienda) {
     cout << "\n=== TRANSACCIONES ===\n";
     cout << left << setw(5) << "ID" << setw(10) << "Tipo" << setw(10) << "Cantidad" << setw(12) << "Total" << setw(12) << "Fecha" << endl;
     cout << string(55, '-') << endl;
-
-
-    for (int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (!tienda->transacciones[i].cancelada)
-        {
-            cout << left << setw(5) << tienda->transacciones[i].id
-                         << setw(10) << tienda->transacciones[i].tipo
-                         << setw(10) << tienda->transacciones[i].cantidad
-                         << setw(12) << tienda->transacciones[i].total
-                         << setw(12) << tienda->transacciones[i].fecha << endl;
-
-        }
-        
-    }
-    int activas = 0;
-
-    for (int i = 0; i < tienda->numTransacciones; i++) {
-
-    if (!tienda->transacciones[i].cancelada)
-        activas++;
-    }
     
+    for (int i = 0; i < tienda->numTransacciones; i++) {
+        if (!tienda->transacciones[i].cancelada) {
+            cout << left << setw(5) << tienda->transacciones[i].id 
+                 << setw(10) << tienda->transacciones[i].tipo 
+                 << setw(10) << tienda->transacciones[i].cantidad 
+                 << setw(12) << tienda->transacciones[i].total
+                 << setw(12) << tienda->transacciones[i].fecha << endl;
+        }
+    }
     cout << "Total de transacciones activas: " << tienda->numTransacciones << endl;
-
 }
 
-void buscarTransacciones(Tienda* tienda){
+void buscarTransacciones(Tienda* tienda) {
     int op;
     cout << "\n=== BUSCAR TRANSACCIONES ===\n";
-    cout << "1. Por ID de transaccion.\n";
-    cout << "2. Por ID de producto.\n";
+    cout << "1. Por ID de transaccion\n";
+    cout << "2. Por ID de producto\n";
     cout << "3. Por ID de cliente\n";
     cout << "4. Por ID de proveedor\n";
-    cout << "5. Por fecha (YYYY-MM-DD).\n";
-    cout << "6. Por tipo (COMPRA/VENTA).\n";
-    cout << "0. CANCELAR.\n";
+    cout << "5. Por fecha (YYYY-MM-DD)\n";
+    cout << "6. Por tipo (COMPRA/VENTA)\n";
+    cout << "0. Cancelar\n";
     cout << "Opcion: ";
     cin >> op; limpiarBuffer();
-
-    if (op == 0 )
-    {
-        return;
-    }
-
-    if (op == 1)
-    {
-        int id;
-        cout << "ID Transaccion: ";
-        cin >> id; limpiarBuffer();
-        bool encontrada = false;
+    if (op == 0) return;
     
-    for (int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (tienda->transacciones[i].id == id && !tienda->transacciones[i].cancelada)
-        {
-            cout << "\n=== TRANSACCION ENCONTRADA ===\n";
-            cout << "ID: " << tienda->transacciones[i].id << "\n";
-            cout << "Tipo: " << tienda->transacciones[i].tipo << "\n";
-            cout << "Producto ID: " << tienda->transacciones[i].idProducto << "\n";
-            cout << "Relacionado ID: " << tienda->transacciones[i].idRelacionado << "\n";
-            cout << "Cantidad: " << tienda->transacciones[i].cantidad << "\n";
-            cout << "Total: " << tienda->transacciones[i].total << "\n";
-            cout << "Fecha: " << tienda->transacciones[i].fecha << "\n";
-            encontrada = true;
-            return;
+    if (op == 1) {
+        int id; cout << "ID Transaccion: "; cin >> id; limpiarBuffer();
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (tienda->transacciones[i].id == id && !tienda->transacciones[i].cancelada) {
+                cout << "\n=== TRANSACCION ENCONTRADA ===\n";
+                cout << "ID: " << tienda->transacciones[i].id << "\n";
+                cout << "Tipo: " << tienda->transacciones[i].tipo << "\n";
+                cout << "Producto ID: " << tienda->transacciones[i].idProducto << "\n";
+                cout << "Relacionado ID: " << tienda->transacciones[i].idRelacionado << "\n";
+                cout << "Cantidad: " << tienda->transacciones[i].cantidad << "\n";
+                cout << "Total: " << tienda->transacciones[i].total << "\n";
+                cout << "Fecha: " << tienda->transacciones[i].fecha << "\n";
+                return;
+            }
         }
+        cout << "Transaccion no encontrada o puede que ya cancelada.\n";
         
-    }
-    if (!encontrada)
-    {
-        cout << "Transaccion no encontrada./n";
-        return;
-    }
-    
-    } else if (op == 2)
-    {
-        int idProd;
-        cout << "ID Producto: ";
-        cin >> idProd; limpiarBuffer();
+    } else if (op == 2) {
+        int idProd; cout << "ID Producto: "; cin >> idProd; limpiarBuffer();
         bool encontrada = false;
-
         cout << "\n=== TRANSACCIONES DEL PRODUCTO ID: " << idProd << " ===\n";
-
-    for (int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (tienda->transacciones[i].idProducto == idProd && !tienda->transacciones[i].cancelada)
-        {
-            cout << "Transaccion #" << tienda->transacciones[i].id
-                 << " | " << tienda->transacciones[i].tipo
-                 << " | " << tienda->transacciones[i].cantidad
-                 << " | " << tienda->transacciones[i].total
-                 << " | " << tienda->transacciones[i].fecha << "\n";
-            encontrada = true;                                             
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (tienda->transacciones[i].idProducto == idProd && !tienda->transacciones[i].cancelada) {
+                cout << "Transaccion #" << tienda->transacciones[i].id 
+                     << " | " << tienda->transacciones[i].tipo 
+                     << " | Cant: " << tienda->transacciones[i].cantidad 
+                     << " | Total: " << tienda->transacciones[i].total 
+                     << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
+                encontrada = true;
+            }
         }
-    }
-    
-    if (!encontrada)
-    {
-        cout << "No hay transacciones para este producto.\n";
-        return;
-    }
-    
-    
-    } else if (op == 3)
-    {
-       int idCli;
-       cout << "ID Cliente: ";
-       cin >> idCli; limpiarBuffer();
-       bool encontrada = false;
-
-       cout << "\n=== TRANSACCIONES DEL CLIENTE ID: " << idCli << "===\n";
-
-    for ( int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (tienda->transacciones[i].idRelacionado == idCli
-             && strcmp(tienda->transacciones[i].tipo, "VENTA") == 0
-             && !tienda->transacciones[i].cancelada)
-        {
-            cout << "Transaccion #" << tienda->transacciones[i].id
-                 << " | Producto ID: " << tienda->transacciones[i].idProducto
-                 << " | Cantidad: " << tienda->transacciones[i].cantidad
-                 << " | Total: " << tienda->transacciones[i].total
-                 << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
-            encontrada = true;
-        }
-    }
-    
-    if (!encontrada)
-    {
-        cout << "No hay transacciones para este cliente.\n";
-        return;
-    }
-    
-    
-    } else if (op == 4)
-    {
-        int idProv;
-        cout << "ID Proveedor: ";
-        cin >> idProv; limpiarBuffer();
-        bool encontrada = false;
-
-        cout << "\n=== TRANSACCIONES DEL PROVEEDOR ID: " << idProv << "===\n";
-    
-    for (int  i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (tienda->transacciones[i].idRelacionado == idProv
-             && strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0
-             && !tienda->transacciones[i].cancelada)
-        {
-            cout << "Transaccion #" << tienda->transacciones[i].id
-                 << " | Producto ID: " << tienda->transacciones[i].idProducto
-                 << " | Cantidad: " << tienda->transacciones[i].cantidad
-                 << " | Total: " << tienda->transacciones[i].total
-                 << " | Fecha: " << tienda->transacciones[i]. fecha << "\n";
-            encontrada = true;
-
-        }
+        if (!encontrada) cout << "No hay transacciones para este producto.\n";
         
-    }
-    
-    if (!encontrada)
-    {
-        cout << "No hay transacciones para este proveedor.\n";
-        return;
-    }
-    
-    
-    } else if (op == 5)
-    {
-        char fecha[11];
-        cout << "Fecha (YYYY-MM-DD): ";
-        cin.getline(fecha, 11);
+    } else if (op == 3) {
+        int idCli; cout << "ID Cliente: "; cin >> idCli; limpiarBuffer();
         bool encontrada = false;
-
+        cout << "\n=== TRANSACCIONES DEL CLIENTE ID: " << idCli << " ===\n";
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (tienda->transacciones[i].idRelacionado == idCli 
+                && strcmp(tienda->transacciones[i].tipo, "VENTA") == 0 
+                && !tienda->transacciones[i].cancelada) {
+                cout << "Transaccion #" << tienda->transacciones[i].id 
+                     << " | Producto ID: " << tienda->transacciones[i].idProducto 
+                     << " | Cant: " << tienda->transacciones[i].cantidad 
+                     << " | Total: " << tienda->transacciones[i].total 
+                     << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
+                encontrada = true;
+            }
+        }
+        if (!encontrada) cout << "No hay transacciones para este cliente.\n";
+        
+    } else if (op == 4) {
+        int idProv; cout << "ID Proveedor: "; cin >> idProv; limpiarBuffer();
+        bool encontrada = false;
+        cout << "\n=== TRANSACCIONES DEL PROVEEDOR ID: " << idProv << " ===\n";
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (tienda->transacciones[i].idRelacionado == idProv 
+                && strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0 
+                && !tienda->transacciones[i].cancelada) {
+                cout << "Transaccion #" << tienda->transacciones[i].id 
+                     << " | Producto ID: " << tienda->transacciones[i].idProducto 
+                     << " | Cant: " << tienda->transacciones[i].cantidad 
+                     << " | Total: " << tienda->transacciones[i].total 
+                     << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
+                encontrada = true;
+            }
+        }
+        if (!encontrada) cout << "No hay transacciones para este proveedor.\n";
+        
+    } else if (op == 5) {
+        char fecha[11]; cout << "Fecha (YYYY-MM-DD): "; cin.getline(fecha, 11);
+        bool encontrada = false;
         cout << "\n=== TRANSACCIONES DE LA FECHA: " << fecha << " ===\n";
-    
-    for (int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (strcmp(tienda->transacciones[i].fecha, fecha) == 0 && !tienda->transacciones[i].cancelada)
-            
-        {
-            cout << "Transaccion #" << tienda->transacciones[i].id
-                << " | " << tienda->transacciones[i].tipo
-                << " | Producto ID: " << tienda->transacciones[i].idProducto
-                << " | Total: " << tienda->transacciones[i].total << "\n";
-            encontrada = true;
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (strcmp(tienda->transacciones[i].fecha, fecha) == 0 && !tienda->transacciones[i].cancelada) {
+                cout << "Transaccion #" << tienda->transacciones[i].id 
+                     << " | " << tienda->transacciones[i].tipo 
+                     << " | Producto ID: " << tienda->transacciones[i].idProducto 
+                     << " | Total: " << tienda->transacciones[i].total << "\n";
+                encontrada = true;
+            }
         }
-    }
-
-    if (!encontrada)
-    {
-        cout << "No hay transacciones en estas fechas.\n";
-        return;
-    }
-    
-    } else if (op == 6)
-    {
-        char tipo[10];
-        cout << "Tipo (COMPRA/VENTA): ";
-        cin.getline(tipo, 10);
-        bool encontrada = false;
+        if (!encontrada) cout << "No hay transacciones en esta fecha.\n";
         
-        cout << "\n=== TRANSACCIONES DE TIPO ===\n";
-    
-    for (int i = 0; i < tienda->numTransacciones; i++)
-    {
-        if (strcmp(tienda->transacciones[i].tipo, tipo) == 0 && !tienda->transacciones[i].cancelada)
-        {
-            cout << "Transaccion #" << tienda->transacciones[i].id
-                 << " | Producto ID: " << tienda->transacciones[i].idProducto
-                 << " | Cantidad: " << tienda->transacciones[i].cantidad
-                 << " | Total: " << tienda->transacciones[i].total
-                 << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
-
-            encontrada = true;
+    } else if (op == 6) {
+        char tipo[10]; cout << "Tipo (COMPRA/VENTA): "; cin.getline(tipo, 10);
+        bool encontrada = false;
+        cout << "\n=== TRANSACCIONES DE TIPO: " << tipo << " ===\n";
+        for (int i = 0; i < tienda->numTransacciones; i++) {
+            if (strcmp(tienda->transacciones[i].tipo, tipo) == 0 && !tienda->transacciones[i].cancelada) {
+                cout << "Transaccion #" << tienda->transacciones[i].id 
+                     << " | Producto ID: " << tienda->transacciones[i].idProducto 
+                     << " | Cant: " << tienda->transacciones[i].cantidad 
+                     << " | Total: " << tienda->transacciones[i].total 
+                     << " | Fecha: " << tienda->transacciones[i].fecha << "\n";
+                encontrada = true;
+            }
         }
-    }
-
-    if (!encontrada)
-     {
-        cout << "No hay transacciones de este tipo.\n";
-        return;
-     }
+        if (!encontrada) cout << "No hay transacciones de este tipo.\n";
     }
 }
 
 void cancelarTransaccion(Tienda* tienda){
     int id;
+    cout << "\n=== CANCELAR TRANSACCION ===\n";
     cout << "ID Transaccion a anular: ";
     cin >> id; limpiarBuffer();
-
+    
     for (int i = 0; i < tienda->numTransacciones; i++)
     {
         if (tienda->transacciones[i].id == id && !tienda->transacciones[i].cancelada)
         {
-           cout << "\n=== DETALLES ===\n";
-           cout << "ID: " << tienda->transacciones[i].id << "\n";
-           cout << "Tipo: " << tienda->transacciones[i].tipo << "\n";
-           cout << "Cantidad: " << tienda->transacciones[i].cantidad << "\n";
-           cout << "Total: " << tienda->transacciones[i].total << "\n";
-           
-           cout << "\nADVERTENCIA: Esto revertira el stock.\n";
-
-         if (strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0)
-           {
-             cout << "- SE RESTARAN " << tienda->transacciones[i].cantidad <<  "unidades del stock.\n";
+            cout << "\n=== DETALLES ===\n";
+            cout << "ID: " << tienda->transacciones[i].id << "\n";
+            cout << "Tipo: " << tienda->transacciones[i].tipo << "\n";
+            cout << "Cantidad: " << tienda->transacciones[i].cantidad << "\n";
+            cout << "Total: " << tienda->transacciones[i].total << "\n";
             
-            } else{
-             
-             cout << "- SE SUMARAN " << tienda->transacciones[i].cantidad << "unidades del stock.\n";
-           }
-
-        char conf;
-        cout << "\n¿Confirmar cancelacion? (Si/No): ";
-        cin >> conf; limpiarBuffer();
-
-        if (conf =='S' || conf == 's'){
-          
-        for (int j = 0; j < tienda->numProductos; j++)
+            cout << "\nADVERTENCIA: Esto revertira el stock.\n";
+            if (strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0)
             {
-            if (tienda->productos[j].id == tienda->transacciones[i].idProducto)
-            {
+                cout << "- Se RESTARAN " << tienda->transacciones[i].cantidad 
+                     << " unidades del stock (Compra → Stock bajará).\n";
+            } else {
+                cout << "- Se SUMARAN " << tienda->transacciones[i].cantidad 
+                     << " unidades al stock (Venta → Stock subirá).\n";
+            }
+            
+            char conf;
+            cout << "\n¿ Desea confirmar cancelacion? (S/N): ";
+            cin >> conf; limpiarBuffer();
+            
+            if (conf == 'S' || conf == 's'){
                 
-            if (strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0){
-              
-            tienda->productos[j].stock += tienda->transacciones[i].cantidad;
-               } else {
+            bool productoEncontrado = false;
+            for (int j = 0; j < tienda->numProductos; j++)
+            {
+                if (tienda->productos[j].id == tienda->transacciones[i].idProducto)
+                {
+                   productoEncontrado = true;
+                        
+                if (strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0){
+                            
+                    int stockAntes = tienda->productos[j].stock;
                     tienda->productos[j].stock -= tienda->transacciones[i].cantidad;
+                    cout << "\n[OK] Stock revertido: " << stockAntes 
+                    << " → " << tienda->productos[j].stock << "\n";
+                                                
+                 } else {
+                            
+                    int stockAntes = tienda->productos[j].stock;
+                    tienda->productos[j].stock += tienda->transacciones[i].cantidad;
+                    cout << "\n[OK] Stock revertido: " << stockAntes 
+                   << " → " << tienda->productos[j].stock << "\n";
+                 }
+                     break;
+                 }
+             }
+                
+                if (!productoEncontrado) {
 
-               }
-                 break;
-                     
+                    cout << "ERROR: No se encontro el producto para revertir stock.\n";
+                }
+                
+                tienda->transacciones[i].cancelada = true;
+                cout << "Transaccion anulada correctamente.\n";
+            } else {
+                
+                  cout << "Operacion cancelada por el usuario.\n";
             }
-            
-            }
-
-        tienda->transacciones[i].cancelada = true;
-        cout << "Transaccion anulada. Stock revertido.\n";
-
-        } else {
-            cout << "Operacion cancelada.\n";
-        }
-           return;
-       
+            return;
         }
     }
-
-    cout << "Transaccion no encotrada.\n";
-    
+    cout << "Transaccion no encontrada o puede que ya este cancelada.\n";
 }
+
 
 void reporteGanancias(Tienda* tienda){
     float totalVentas = 0, totalCompras = 0;
@@ -2001,7 +1882,7 @@ void reporteGanancias(Tienda* tienda){
         
     }
     
-    cout << "\n=== REPORTE DE GANANIAS ===\n";
+    cout << "\n=== REPORTE DE GANANCIAS ===\n";
     cout << "Total Ventas: " << totalVentas << "\n";
     cout << "Total Compras> " << totalCompras << "\n";
     cout << "Ganancia Obtenida: " << (totalVentas - totalCompras) << "\n";
