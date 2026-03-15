@@ -476,6 +476,10 @@ void crearProducto(Tienda* tienda){
     Producto* p = &tienda->productos[tienda->numProductos];
     char temp[200];
     int idProv;
+    int Nike;
+    int Adidas;
+    int Puma;
+    
 
 
     cout << "Codigo (EJ. CAL-001): "; cin.getline(temp, 20);
@@ -492,24 +496,62 @@ void crearProducto(Tienda* tienda){
     }
     strcpy(p->codigo, temp);
 
-    cout << "Marca ( Nike, Adidas, Puma...): "; cin.getline(p->marca, 50);
-    if(strcmp(p->marca, "0") == 0)
+    cout << "Marca ( Nike, Adidas, Puma): "; cin.getline(p->marca, 50);
+    if(strcmp(p->marca, "0") == 0 || strcmp(p->marca, "CANCELAR") == 0)
     {cout << "Operacion Cancelada.\n";
          return;
     }
+    
+    if(p->marca == Nike && p->marca == Adidas && p->marca == Puma )
+    {
+        cout << "Ingrese la marca valida(Nike, Adidas o Puma)";
+        return;
+    }
+    
+
+
 
     cout << "Modelo: "; cin.getline(p->modelo, 50);
+     if(strcmp(p->modelo, "0") == 0 || strcmp(p->modelo, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
     cout << "Nombre: "; cin.getline(p->nombre, 100);
-    if(strcmp(p->nombre, "0") == 0)
+    if(strcmp(p->nombre, "0") == 0 || strcmp(p->nombre, "CANCELAR") == 0)
     { cout << "Operacion cancelada.\n"; 
         return;
     }
 
     cout << "Talla: "; cin.getline(p->talla, 10);
+     if(strcmp(p->talla, "0") == 0 || strcmp(p->talla, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
     cout << "Color: "; cin.getline(p->color, 30);
+     if(strcmp(p->color, "0") == 0 || strcmp(p->color, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
     cout << "Genero: "; cin.getline(p->genero, 20);
+     if(strcmp(p->genero, "0") == 0 || strcmp(p->genero, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
     cout << "Material: "; cin.getline(p->material, 50);
-    cout << "Descripcion: "; cin.getline(p->descripcion, 200);
+     if(strcmp(p->material, "0") == 0 || strcmp(p->material, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
+
+    cout << "Descripcion: "; cin.getline(p->descripcion, 200); 
+    if(strcmp(p->descripcion, "0") == 0 || strcmp(p->descripcion, "CANCELAR") == 0)
+    { cout << "Operacion cancelada.\n"; 
+        return;
+    }
     
     cout << "ID Proveedor: "; cin >> idProv; limpiarBuffer();
     if(idProv == 0){
@@ -979,7 +1021,7 @@ void crearProveedor(Tienda* tienda){
 
 
     cout << "Nombre: "; cin.getline(temp, 100);
-    if (strcmp(temp, "0") == 0)
+    if (strcmp(p->nombre, "0") == 0 || strcmp(p->nombre, "CANCELAR") == 0)
     {
         cout << "Operacion cancelada\n";
         return;
@@ -988,7 +1030,7 @@ void crearProveedor(Tienda* tienda){
     strcpy(p->nombre, temp);
     
     cout << "RIF: "; cin.getline(temp, 20);
-    if (strcmp(temp, "0") == 0)
+    if (strcmp(p->rif, "0") == 0 || strcmp(p->rif, "CANCELAR") == 0)
     {
         cout << "Operacion cancelada\n";
         return;
@@ -1002,6 +1044,11 @@ void crearProveedor(Tienda* tienda){
     strcpy(p->rif, temp);
 
     cout << "Telefono: "; cin.getline(p->telefono, 20);
+    if (strcmp(p->telefono, "0") == 0 || strcmp(p->telefono, "CANCELAR") == 0)
+    {
+        cout << "Operacion cancelada\n";
+        return;
+    }
 
     cout << "Email: "; cin.getline(temp, 100);
     if (!validarEmail(temp))
@@ -1012,6 +1059,11 @@ void crearProveedor(Tienda* tienda){
     strcpy(p->email, temp);
     
     cout << "Direccion: "; cin.getline(p->direccion, 200);
+    if (strcmp(p->direccion, "0") == 0 || strcmp(p->direccion, "CANCELAR") == 0)
+    {
+        cout << "Operacion cancelada\n";
+        return;
+    }
 
     char conf;
     cout << "\n¿Guardar proveedor? (S/N): "; cin >> conf; limpiarBuffer();
@@ -1809,10 +1861,10 @@ void cancelarTransaccion(Tienda* tienda){
             if (strcmp(tienda->transacciones[i].tipo, "COMPRA") == 0)
             {
                 cout << "- Se RESTARAN " << tienda->transacciones[i].cantidad 
-                     << " unidades del stock (Compra → Stock bajará).\n";
+                     << " unidades del stock (Compra de stock bajara).\n";
             } else {
                 cout << "- Se SUMARAN " << tienda->transacciones[i].cantidad 
-                     << " unidades al stock (Venta → Stock subirá).\n";
+                     << " unidades al stock (Venta de stock subira).\n";
             }
             
             char conf;
@@ -1833,7 +1885,7 @@ void cancelarTransaccion(Tienda* tienda){
                     int stockAntes = tienda->productos[j].stock;
                     tienda->productos[j].stock -= tienda->transacciones[i].cantidad;
                     cout << "\n[OK] Stock revertido: " << stockAntes 
-                    << " → " << tienda->productos[j].stock << "\n";
+                    << " a " << tienda->productos[j].stock << "\n";
                                                 
                  } else {
                             
@@ -1872,6 +1924,7 @@ void reporteGanancias(Tienda* tienda){
         if (!tienda->transacciones[i].cancelada)
         {
             if (strcmp(tienda->transacciones[i].tipo, "VENTA") == 0)
+    
             {
                 totalVentas += tienda->transacciones[i].total;
             } else {
@@ -2140,15 +2193,14 @@ void menuPrincipal(Tienda* tienda){
         if (tienda->numProductos > 0 || tienda->numTransacciones > 0)
         {
             char conf;
-            cout << "\n¿Desea salir? Hay datos registrados que no se han guardado estimado. (Si / No): ";
+            cout << "\n¿Desea salir? Hay datos registrados que no se han guardado estimado. (S/N): ";
             cin >> conf; limpiarBuffer();
             if (conf != 'S' && conf != 's')
-            {
+            {   
                 break;
             }
-            cout << "Vertale Gracias por usar este maravilloso sistema!\n";
-        
         }
+             cout << "Muchas Gracias por usar este maravilloso sistema!\n";
             return;
 
         default: cout << "Opcion invalida.\n";
